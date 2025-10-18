@@ -1,57 +1,81 @@
 # gituse
 
-Single-arg helper to switch between multiple GitHub accounts in your terminal using HTTPS credentials.
-You run `gituse personal` or `gituse work`, and it updates your global Git identity accordingly.
+A simple helper to switch between multiple GitHub accounts (work, personal, client, etc.)  
+It updates your global Git identity so your commits and pushes use the right account — automatically setting your name, email, and credential username.
 
-No multi-parameter calls. One argument only: the profile name.
+---
 
-## What it does
-- Sets `user.name`, `user.email`, and `credential.username` in your global Git config
-- Optionally clears cached HTTPS credentials (so the next push pulls the right token)
-- Prints the active identity
+## 🚀 Setup
 
-## Install
-1) Save `gituse.sh` somewhere, e.g. `~/scripts/gituse.sh`.
-2) Add this to your shell config (`~/.bashrc` or `~/.zshrc`):
-```bash
-source ~/scripts/gituse.sh
-```
-3) Reload your shell:
-```bash
-source ~/.bashrc
-# or
-source ~/.zshrc
-```
+1. Save `gituse.sh` somewhere (e.g. `~/scripts/gituse.sh`).
+2. Add this to your shell config (`~/.bashrc` or `~/.zshrc`):
+   ```bash
+   source ~/scripts/gituse.sh
+   ```
+3. Reload your shell:
+   ```bash
+   source ~/.bashrc
+   # or
+   source ~/.zshrc
+   ```
 
-## Configure profiles
-Open `gituse.sh` and edit the profile values near the top.
-There are three example profiles: `personal`, `work`, and `client`.
-Replace the example names, emails, and usernames with yours.
+---
 
-## Usage
+## 🧠 Usage
+
+Switch to your personal account:
 ```bash
 gituse personal
+```
+Switch to your work account:
+```bash
 gituse work
+```
+Switch to your client account:
+```bash
 gituse client
 ```
 
-## Verify
+You’ll immediately see which profile is active, and any new commits will use the correct name, email, and credentials.
+
+---
+
+## 🔍 Verification
+
+You can verify your active identity anytime:
 ```bash
 git config --global user.name
 git config --global user.email
 git config --global credential.username
 ```
 
-If a push uses the wrong GitHub account, your OS may have cached an old token.
-Clear the stored github.com token from your keychain/credential manager, or run:
+---
+
+## ⚙️ How it works
+
+- `gituse personal` sets your **personal** Git identity (name, email, username)
+- `gituse work` sets your **work** Git identity
+- `gituse client` sets your **client** Git identity
+
+If you push to GitHub via HTTPS, these credentials ensure the correct account is used.  
+If you use SSH, note that GitHub identifies you by your SSH key, not by your Git config.
+
+---
+
+## ✅ Example
 
 ```bash
-git credential reject
-protocol=https
-host=github.com
-# press Enter twice
+gituse personal
+git config user.email
+# -> your_personal_email@example.com
+
+git commit -m "Update README"
+git push
+# Commit will appear under your personal GitHub account (akassab)
 ```
 
-## Notes
-- This script is for HTTPS remotes like `https://github.com/user/repo.git`.
-- If you prefer SSH keys instead of HTTPS tokens, you can ignore this script and stick with SSH config.
+---
+
+## 🧩 Notes
+
+If your commits don't link to your GitHub account, make sure the **email address** in your commit is verified in the GitHub account you're trying to use.
